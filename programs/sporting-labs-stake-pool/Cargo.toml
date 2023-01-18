@@ -1,0 +1,30 @@
+[package]
+name = "sporting-labs-stake-pool"
+version = "1.16.4"
+description = "SportingLabs stake pool"
+edition = "2021"
+license = "AGPL-3.0"
+keywords = ["solana", "F1", "stake", "pool", "sportinglabs"]
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "sporting_labs_stake_pool"
+
+[features]
+no-entrypoint = []
+no-idl = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = { version = "0.25.0", features = ["init-if-needed"] }
+anchor-spl = "0.25.0"
+solana-program = "=1.10.29"
+spl-token = { version = "3.2.0", features = ["no-entrypoint"] }
+mpl-token-metadata = { version = "=1.3.3", features = ["no-entrypoint"] }
+cardinal-token-manager = { version = "^2.0.0", features = ["cpi"] }
+cardinal-payment-manager = { version = "^2.1.1", features = ["cpi"] }
+arrayref = "0.3.6"
+
+[dev-dependencies]
+proptest = { version = "1.0" }

@@ -1,0 +1,52 @@
+use anchor_lang::prelude::*;
+
+pub const STAKE_ENTRY_PREFIX: &str = "stake-entry";
+pub const STAKE_ENTRY_SIZE: usize = 8 + std::mem::size_of::<StakeEntry>() + 8;
+
+pub const STAKE_POOL_PREFIX: &str = "stake-pool";
+// 5 Pubkeys for creators and collections
+pub const STAKE_POOL_SIZE: usize = 8 + 1 + 8 + 32 + 4 + 3 * 32 + 4 + 1;
+
+pub const IDENTIFIER_PREFIX: &str = "identifier";
+pub const IDENTIFIER_SIZE: usize = 8 + std::mem::size_of::<Identifier>() + 8;
+
+#[account]
+pub struct StakeEntry {
+    pub bump: u8,
+    pub pool: Pubkey,
+    pub amount: u64,
+    pub original_mint: Pubkey,
+    pub original_mint_claimed: bool,
+    pub last_staker: Pubkey,
+    pub stake_mint_claimed: bool,
+}
+
+pub enum PoolState {
+    PreRace = 1,
+    ActiveRace = 2,
+    PostRace = 3,
+}
+
+#[account]
+pub struct StakePool {
+    pub bump: u8,
+    pub identifier: u64,
+    pub authority: Pubkey,
+    pub requires_creators: Vec<Pubkey>,
+    pub total_staked: u32,
+    pub pool_state: u8
+}
+
+#[account]
+pub struct Identifier {
+    pub bump: u8,
+    pub count: u64,
+}
+
+pub fn stake_entry_fill_zeros<'info>(stake_entry: &mut Account<StakeEntry>) -> Result<()> {
+    let stake_entry_account = stake_entry.to_account_info();
+    let mut stake_entry_data = stake_entry_account.data.borrow_mut();
+    let len = stake_entry_data.len();
+    stake_entry_data[stake_entry.try_to_vec()?.len()..len].iter_mut().for_each(|d| *d = 0);
+    Ok(())
+}

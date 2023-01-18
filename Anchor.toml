@@ -1,0 +1,18 @@
+[features]
+seeds = false
+skip-lint = false
+[programs.localnet]
+sporting_labs_stake_pool = "654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess"
+
+[programs.devnet]
+sporting_labs_stake_pool = "654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "devnet"
+wallet = "/home/kulture/.config/solana/sporting-labs-kp.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

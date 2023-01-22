@@ -38,4 +38,8 @@ pub enum ErrorCode {
     InvalidMintMetadataOwner,
     #[msg("Invalid stake entry")]
     InvalidStakeEntry,
+    #[msg("Invalid Vrf Authority Error")]
+    InvalidVrfAuthorityError,
+    #[msg("Invalid Vrf Account")]
+    InvalidVrfAccount
 }

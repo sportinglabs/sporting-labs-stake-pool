@@ -27,14 +27,21 @@ pub enum PoolState {
     PostRace = 3,
 }
 
-#[account]
+pub enum RaceResult {
+    Wet = 1,
+    Dry = 2,
+}
+
+#[account()]
 pub struct StakePool {
     pub bump: u8,
     pub identifier: u64,
     pub authority: Pubkey,
     pub requires_creators: Vec<Pubkey>,
     pub total_staked: u32,
-    pub pool_state: u8
+    pub pool_state: u8,
+    pub result: u8,
+    pub vrf: Pubkey
 }
 
 #[account]

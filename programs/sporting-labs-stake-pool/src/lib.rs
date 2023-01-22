@@ -3,7 +3,10 @@ pub mod instructions;
 pub mod state;
 pub mod utils;
 
-use {anchor_lang::prelude::*, instructions::*};
+use {
+    anchor_lang::prelude::*,
+    instructions::*,
+};
 
 declare_id!("654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess");
 
@@ -57,5 +60,21 @@ pub mod sporting_labs_stake_pool {
 
     pub fn stake_pool_fill_zeros(ctx: Context<StakePoolFillZeros>) -> Result<()> {
         stake_pool_fill_zeros::handler(ctx)
+    }
+
+    #[access_control(ctx.accounts.validate(&ctx, &params))]
+    pub fn request_randomness(
+        ctx: Context<RequestRandomness>,
+        params: RequestRandomnessParams,
+    ) -> Result<()> {
+        RequestRandomness::actuate(&ctx, &params)
+    }
+
+    #[access_control(ctx.accounts.validate(&ctx, &params))]
+    pub fn consume_randomness(
+        ctx: Context<ConsumeRandomness>,
+        params: ConsumeRandomnessParams,
+    ) -> Result<()> {
+        ConsumeRandomness::actuate(ctx, &params)
     }
 }

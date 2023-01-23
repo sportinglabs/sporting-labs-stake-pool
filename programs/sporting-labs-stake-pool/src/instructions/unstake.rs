@@ -8,7 +8,7 @@ use {
 pub struct UnstakeCtx<'info> {
     #[account(mut)]
     stake_pool: Box<Account<'info, StakePool>>,
-    treasury_authority: Account<'info, TreasuryAuthority>,
+    treasury: Account<'info, Treasury>,
     #[account(mut, constraint = stake_entry.pool == stake_pool.key() @ ErrorCode::InvalidStakePool)]
     stake_entry: Box<Account<'info, StakeEntry>>,
 
@@ -25,7 +25,7 @@ pub struct UnstakeCtx<'info> {
     // reward distribution
     #[account(mut, constraint = user_reward_mint_token_account.mint == stake_pool.reward_mint && user_reward_mint_token_account.owner == user.key() @ ErrorCode::InvalidUserRewardMintTokenAccount)]
     user_reward_mint_token_account: Account<'info, TokenAccount>,
-    #[account(mut, constraint = reward_mint.key() == treasury_authority.reward_mint @ ErrorCode::InvalidRewardMint)]
+    #[account(mut, constraint = reward_mint.key() == treasury.reward_mint @ ErrorCode::InvalidRewardMint)]
     reward_mint: Account<'info, Mint>,
 
     // user
@@ -43,11 +43,11 @@ pub struct UnstakeCtx<'info> {
 
 pub fn handler(ctx: Context<UnstakeCtx>) -> Result<()> {
     let stake_pool = &mut ctx.accounts.stake_pool;
-    let treasury_authority = &mut ctx.accounts.treasury_authority;
+    let treasury = &mut ctx.accounts.treasury;
     let stake_entry = &mut ctx.accounts.stake_entry;
 
-    let bump = treasury_authority.bump.clone();
-    let treasury_authority_seeds: &[&[&[u8]]] = &[&[&TREASURY_AUTHORITY_PREFIX.as_bytes(), &[bump]]];
+    let bump = treasury.bump.clone();
+    let treasury_authority_seeds: &[&[&[u8]]] = &[&[&TREASURY_PREFIX.as_bytes(), &[bump]]];
 
     if stake_pool.pool_state == PoolState::ActiveRace as u8 {
         return Err(error!(ErrorCode::RaceIsOngoing));
@@ -68,7 +68,7 @@ pub fn handler(ctx: Context<UnstakeCtx>) -> Result<()> {
         let cpi_accounts = token::MintTo {
             mint: ctx.accounts.reward_mint.to_account_info(),
             to: ctx.accounts.user_reward_mint_token_account.to_account_info(),
-            authority: treasury_authority.to_account_info(),
+            authority: treasury.to_account_info(),
         };
         let cpi_program = ctx.accounts.token_program.to_account_info();
         let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(treasury_authority_seeds);

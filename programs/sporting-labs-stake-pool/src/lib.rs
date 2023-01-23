@@ -18,10 +18,6 @@ pub mod sporting_labs_stake_pool {
         init_treasury::handler(ctx)
     }
 
-    pub fn init_identifier(ctx: Context<InitIdentifierCtx>) -> Result<()> {
-        init_identifier::handler(ctx)
-    }
-
     pub fn init_pool(ctx: Context<InitPoolCtx>, ix: InitPoolIx) -> Result<()> {
         init_pool::handler(ctx, ix)
     }

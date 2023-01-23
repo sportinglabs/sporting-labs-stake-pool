@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 
-pub const TREASURY_AUTHORITY_PREFIX: &str = "treasury";
-pub const TREASURY_AUTHORITY_SIZE: usize = 8 + std::mem::size_of::<StakeEntry>() + 8;
+pub const TREASURY_PREFIX: &str = "treasury";
+pub const TREASURY_SIZE: usize = 8 + std::mem::size_of::<StakeEntry>() + 8;
 
 pub const STAKE_ENTRY_PREFIX: &str = "stake-entry";
 pub const STAKE_ENTRY_SIZE: usize = 8 + std::mem::size_of::<StakeEntry>() + 8;
@@ -10,13 +10,11 @@ pub const STAKE_POOL_PREFIX: &str = "stake-pool";
 // 5 Pubkeys for creators and collections
 pub const STAKE_POOL_SIZE: usize = 8 + 1 + 8 + 32 + 4 + 3 * 32 + 4 + 1;
 
-pub const IDENTIFIER_PREFIX: &str = "identifier";
-pub const IDENTIFIER_SIZE: usize = 8 + std::mem::size_of::<Identifier>() + 8;
-
 #[account]
-pub struct TreasuryAuthority {
+pub struct Treasury {
     pub bump: u8,
     pub reward_mint: Pubkey,
+    pub pool_count: u64,
 }
 
 #[account]
@@ -51,12 +49,6 @@ pub struct StakePool {
     pub result: u8,
     pub vrf: Pubkey,
     pub reward_mint: Pubkey,
-}
-
-#[account]
-pub struct Identifier {
-    pub bump: u8,
-    pub count: u64,
 }
 
 pub fn stake_entry_fill_zeros<'info>(stake_entry: &mut Account<StakeEntry>) -> Result<()> {

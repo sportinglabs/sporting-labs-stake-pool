@@ -10,11 +10,11 @@ pub struct InitTreasuryCtx<'info> {
     #[account(
         init,
         payer = payer,
-        space = TREASURY_AUTHORITY_SIZE,
-        seeds = [TREASURY_AUTHORITY_PREFIX.as_bytes()],
+        space = TREASURY_SIZE,
+        seeds = [TREASURY_PREFIX.as_bytes()],
         bump
     )]
-    treasury_authority: Account<'info, TreasuryAuthority>,
+    treasury: Account<'info, Treasury>,
     #[account(mut)]
     reward_mint: Account<'info, Mint>,
     #[account(mut)]
@@ -25,7 +25,8 @@ pub struct InitTreasuryCtx<'info> {
 
 pub fn handler(ctx: Context<InitTreasuryCtx>) -> Result<()> {
 
-  let treasury_authority = &mut ctx.accounts.treasury_authority;
+  let treasury = &mut ctx.accounts.treasury;
+  treasury.pool_count = 1;
     
   let cpi_accounts = SetAuthority {
     account_or_mint: ctx.accounts.reward_mint.to_account_info(),
@@ -34,7 +35,7 @@ pub fn handler(ctx: Context<InitTreasuryCtx>) -> Result<()> {
 
   let cpi_program = ctx.accounts.token_program.to_account_info();
   let cpi_context = CpiContext::new(cpi_program, cpi_accounts);
-  token::set_authority(cpi_context, AuthorityType::MintTokens, Some(treasury_authority.key()))?;
+  token::set_authority(cpi_context, AuthorityType::MintTokens, Some(treasury.key()))?;
       
   Ok(())
 }

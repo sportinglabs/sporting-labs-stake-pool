@@ -18,12 +18,12 @@ pub struct InitPoolCtx<'info> {
         init,
         payer = payer,
         space = STAKE_POOL_SIZE,
-        seeds = [STAKE_POOL_PREFIX.as_bytes(), identifier.count.to_le_bytes().as_ref()],
+        seeds = [STAKE_POOL_PREFIX.as_bytes(), treasury.pool_count.to_le_bytes().as_ref()],
         bump
     )]
     stake_pool: Account<'info, StakePool>,
     #[account(mut)]
-    identifier: Account<'info, Identifier>,
+    treasury: Account<'info, Treasury>,
     #[account(
         constraint = vrf.load()?.authority == stake_pool.key() @ ErrorCode::InvalidVrfAuthorityError
     )]
@@ -35,9 +35,9 @@ pub struct InitPoolCtx<'info> {
 
 pub fn handler(ctx: Context<InitPoolCtx>, ix: InitPoolIx) -> Result<()> {
     let stake_pool = &mut ctx.accounts.stake_pool;
-    let identifier = &mut ctx.accounts.identifier;
+    let identifier = &mut ctx.accounts.treasury;
     stake_pool.bump = *ctx.bumps.get("stake_pool").unwrap();
-    stake_pool.identifier = identifier.count;
+    stake_pool.identifier = identifier.pool_count;
     stake_pool.requires_creators = ix.requires_creators;
     stake_pool.authority = ix.authority;
     stake_pool.total_staked = 0;
@@ -45,8 +45,7 @@ pub fn handler(ctx: Context<InitPoolCtx>, ix: InitPoolIx) -> Result<()> {
     stake_pool.result = 0;
     stake_pool.vrf = ctx.accounts.vrf.key();
 
-    let identifier = &mut ctx.accounts.identifier;
-    identifier.count += 1;
+    identifier.pool_count += 1;
     
     Ok(())
 }

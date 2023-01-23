@@ -8,7 +8,6 @@ use {
 pub struct InitPoolIx {
     requires_creators: Vec<Pubkey>,
     authority: Pubkey,
-    supply: u64,
 }
 
 #[derive(Accounts)]

@@ -21,6 +21,9 @@ export type StakePoolArgs = {
   requiresCreators: web3.PublicKey[]
   totalStaked: number
   poolState: number
+  result: number
+  vrf: web3.PublicKey
+  rewardMint: web3.PublicKey
 }
 
 export const stakePoolDiscriminator = [121, 34, 206, 21, 79, 127, 255, 28]
@@ -38,7 +41,10 @@ export class StakePool implements StakePoolArgs {
     readonly authority: web3.PublicKey,
     readonly requiresCreators: web3.PublicKey[],
     readonly totalStaked: number,
-    readonly poolState: number
+    readonly poolState: number,
+    readonly result: number,
+    readonly vrf: web3.PublicKey,
+    readonly rewardMint: web3.PublicKey
   ) {}
 
   /**
@@ -51,7 +57,10 @@ export class StakePool implements StakePoolArgs {
       args.authority,
       args.requiresCreators,
       args.totalStaked,
-      args.poolState
+      args.poolState,
+      args.result,
+      args.vrf,
+      args.rewardMint
     )
   }
 
@@ -176,6 +185,9 @@ export class StakePool implements StakePoolArgs {
       requiresCreators: this.requiresCreators,
       totalStaked: this.totalStaked,
       poolState: this.poolState,
+      result: this.result,
+      vrf: this.vrf.toBase58(),
+      rewardMint: this.rewardMint.toBase58(),
     }
   }
 }
@@ -198,6 +210,9 @@ export const stakePoolBeet = new beet.FixableBeetStruct<
     ['requiresCreators', beet.array(beetSolana.publicKey)],
     ['totalStaked', beet.u32],
     ['poolState', beet.u8],
+    ['result', beet.u8],
+    ['vrf', beetSolana.publicKey],
+    ['rewardMint', beetSolana.publicKey],
   ],
   StakePool.fromArgs,
   'StakePool'

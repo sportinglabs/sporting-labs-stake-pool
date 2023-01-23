@@ -5,58 +5,67 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
+import * as splToken from '@solana/spl-token'
 import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
 
 /**
  * @category Instructions
- * @category InitIdentifier
+ * @category InitTreasury
  * @category generated
  */
-export const initIdentifierStruct = new beet.BeetArgsStruct<{
+export const initTreasuryStruct = new beet.BeetArgsStruct<{
   instructionDiscriminator: number[] /* size: 8 */
 }>(
   [['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)]],
-  'InitIdentifierInstructionArgs'
+  'InitTreasuryInstructionArgs'
 )
 /**
- * Accounts required by the _initIdentifier_ instruction
+ * Accounts required by the _initTreasury_ instruction
  *
- * @property [_writable_] identifier
+ * @property [_writable_] treasury
+ * @property [_writable_] rewardMint
  * @property [_writable_, **signer**] payer
  * @category Instructions
- * @category InitIdentifier
+ * @category InitTreasury
  * @category generated
  */
-export type InitIdentifierInstructionAccounts = {
-  identifier: web3.PublicKey
+export type InitTreasuryInstructionAccounts = {
+  treasury: web3.PublicKey
+  rewardMint: web3.PublicKey
   payer: web3.PublicKey
   systemProgram?: web3.PublicKey
+  tokenProgram?: web3.PublicKey
   anchorRemainingAccounts?: web3.AccountMeta[]
 }
 
-export const initIdentifierInstructionDiscriminator = [
-  205, 45, 79, 182, 215, 136, 160, 46,
+export const initTreasuryInstructionDiscriminator = [
+  105, 152, 173, 51, 158, 151, 49, 14,
 ]
 
 /**
- * Creates a _InitIdentifier_ instruction.
+ * Creates a _InitTreasury_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
  * @category Instructions
- * @category InitIdentifier
+ * @category InitTreasury
  * @category generated
  */
-export function createInitIdentifierInstruction(
-  accounts: InitIdentifierInstructionAccounts,
+export function createInitTreasuryInstruction(
+  accounts: InitTreasuryInstructionAccounts,
   programId = new web3.PublicKey('654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess')
 ) {
-  const [data] = initIdentifierStruct.serialize({
-    instructionDiscriminator: initIdentifierInstructionDiscriminator,
+  const [data] = initTreasuryStruct.serialize({
+    instructionDiscriminator: initTreasuryInstructionDiscriminator,
   })
   const keys: web3.AccountMeta[] = [
     {
-      pubkey: accounts.identifier,
+      pubkey: accounts.treasury,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.rewardMint,
       isWritable: true,
       isSigner: false,
     },
@@ -67,6 +76,11 @@ export function createInitIdentifierInstruction(
     },
     {
       pubkey: accounts.systemProgram ?? web3.SystemProgram.programId,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.tokenProgram ?? splToken.TOKEN_PROGRAM_ID,
       isWritable: false,
       isSigner: false,
     },

@@ -3,10 +3,15 @@
   "name": "sporting_labs_stake_pool",
   "instructions": [
     {
-      "name": "initIdentifier",
+      "name": "initTreasury",
       "accounts": [
         {
-          "name": "identifier",
+          "name": "treasury",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardMint",
           "isMut": true,
           "isSigner": false
         },
@@ -17,6 +22,11 @@
         },
         {
           "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -32,8 +42,13 @@
           "isSigner": false
         },
         {
-          "name": "identifier",
+          "name": "treasury",
           "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vrf",
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -228,6 +243,11 @@
           "isSigner": false
         },
         {
+          "name": "treasury",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "stakeEntry",
           "isMut": true,
           "isSigner": false
@@ -239,6 +259,16 @@
         },
         {
           "name": "stakeEntryOriginalMintTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userRewardMintTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardMint",
           "isMut": true,
           "isSigner": false
         },
@@ -397,9 +427,133 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "requestRandomness",
+      "accounts": [
+        {
+          "name": "stakePool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vrf",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "oracleQueue",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "queueAuthority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "dataBuffer",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "CHECK"
+          ]
+        },
+        {
+          "name": "permission",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "escrow",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programState",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "switchboardProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payerWallet",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payerAuthority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "recentBlockhashes",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": "RequestRandomnessParams"
+          }
+        }
+      ]
+    },
+    {
+      "name": "consumeRandomness",
+      "accounts": [
+        {
+          "name": "stakePool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vrf",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": "ConsumeRandomnessParams"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
+    {
+      "name": "Treasury",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "rewardMint",
+            "type": "publicKey"
+          },
+          {
+            "name": "poolCount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
     {
       "name": "StakeEntry",
       "type": {
@@ -428,10 +582,6 @@
           {
             "name": "lastStaker",
             "type": "publicKey"
-          },
-          {
-            "name": "stakeMintClaimed",
-            "type": "bool"
           }
         ]
       }
@@ -466,12 +616,26 @@
           {
             "name": "poolState",
             "type": "u8"
+          },
+          {
+            "name": "result",
+            "type": "u8"
+          },
+          {
+            "name": "vrf",
+            "type": "publicKey"
+          },
+          {
+            "name": "rewardMint",
+            "type": "publicKey"
           }
         ]
       }
-    },
+    }
+  ],
+  "types": [
     {
-      "name": "Identifier",
+      "name": "ConsumeRandomnessParams",
       "type": {
         "kind": "struct",
         "fields": [
@@ -480,14 +644,12 @@
             "type": "u8"
           },
           {
-            "name": "count",
-            "type": "u64"
+            "name": "identifier",
+            "type": "u32"
           }
         ]
       }
-    }
-  ],
-  "types": [
+    },
     {
       "name": "InitPoolIx",
       "type": {
@@ -502,6 +664,26 @@
           {
             "name": "authority",
             "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RequestRandomnessParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "permissionBump",
+            "type": "u8"
+          },
+          {
+            "name": "switchboardStateBump",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
           }
         ]
       }
@@ -541,6 +723,20 @@
           },
           {
             "name": "PostRace"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RaceResult",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Wet"
+          },
+          {
+            "name": "Dry"
           }
         ]
       }
@@ -636,6 +832,31 @@
       "code": 6017,
       "name": "InvalidStakeEntry",
       "msg": "Invalid stake entry"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidVrfAuthorityError",
+      "msg": "Invalid Vrf Authority Error"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidVrfAccount",
+      "msg": "Invalid Vrf Account"
+    },
+    {
+      "code": 6020,
+      "name": "NoResult",
+      "msg": "No Result"
+    },
+    {
+      "code": 6021,
+      "name": "InvalidRewardMint",
+      "msg": "Invalid Reward Mint"
+    },
+    {
+      "code": 6022,
+      "name": "InvalidUserRewardMintTokenAccount",
+      "msg": "Invalid User Reward Mint Token Account"
     }
   ],
   "metadata": {

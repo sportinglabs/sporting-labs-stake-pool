@@ -1,0 +1,15 @@
+{
+  "name": "sporting-labs-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kulture",
+  "license": "ISC",
+  "dependencies": {
+    "@solana/web3.js": "^1.73.0",
+    "@switchboard-xyz/solana.js": "^2.0.86"
+  }
+}

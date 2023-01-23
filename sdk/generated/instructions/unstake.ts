@@ -24,9 +24,12 @@ export const unstakeStruct = new beet.BeetArgsStruct<{
  * Accounts required by the _unstake_ instruction
  *
  * @property [_writable_] stakePool
+ * @property [] treasury
  * @property [_writable_] stakeEntry
  * @property [] originalMint
  * @property [_writable_] stakeEntryOriginalMintTokenAccount
+ * @property [_writable_] userRewardMintTokenAccount
+ * @property [_writable_] rewardMint
  * @property [_writable_, **signer**] user
  * @property [_writable_] userOriginalMintTokenAccount
  * @category Instructions
@@ -35,9 +38,12 @@ export const unstakeStruct = new beet.BeetArgsStruct<{
  */
 export type UnstakeInstructionAccounts = {
   stakePool: web3.PublicKey
+  treasury: web3.PublicKey
   stakeEntry: web3.PublicKey
   originalMint: web3.PublicKey
   stakeEntryOriginalMintTokenAccount: web3.PublicKey
+  userRewardMintTokenAccount: web3.PublicKey
+  rewardMint: web3.PublicKey
   user: web3.PublicKey
   userOriginalMintTokenAccount: web3.PublicKey
   tokenProgram?: web3.PublicKey
@@ -70,6 +76,11 @@ export function createUnstakeInstruction(
       isSigner: false,
     },
     {
+      pubkey: accounts.treasury,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
       pubkey: accounts.stakeEntry,
       isWritable: true,
       isSigner: false,
@@ -81,6 +92,16 @@ export function createUnstakeInstruction(
     },
     {
       pubkey: accounts.stakeEntryOriginalMintTokenAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.userRewardMintTokenAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.rewardMint,
       isWritable: true,
       isSigner: false,
     },

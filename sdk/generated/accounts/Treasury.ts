@@ -10,68 +10,52 @@ import * as beet from '@metaplex-foundation/beet'
 import * as beetSolana from '@metaplex-foundation/beet-solana'
 
 /**
- * Arguments used to create {@link StakeEntry}
+ * Arguments used to create {@link Treasury}
  * @category Accounts
  * @category generated
  */
-export type StakeEntryArgs = {
+export type TreasuryArgs = {
   bump: number
-  pool: web3.PublicKey
-  amount: beet.bignum
-  originalMint: web3.PublicKey
-  originalMintClaimed: boolean
-  lastStaker: web3.PublicKey
-  stakeMintClaimed: boolean
+  rewardMint: web3.PublicKey
+  poolCount: beet.bignum
 }
 
-export const stakeEntryDiscriminator = [187, 127, 9, 35, 155, 68, 86, 40]
+export const treasuryDiscriminator = [238, 239, 123, 238, 89, 1, 168, 253]
 /**
- * Holds the data for the {@link StakeEntry} Account and provides de/serialization
+ * Holds the data for the {@link Treasury} Account and provides de/serialization
  * functionality for that data
  *
  * @category Accounts
  * @category generated
  */
-export class StakeEntry implements StakeEntryArgs {
+export class Treasury implements TreasuryArgs {
   private constructor(
     readonly bump: number,
-    readonly pool: web3.PublicKey,
-    readonly amount: beet.bignum,
-    readonly originalMint: web3.PublicKey,
-    readonly originalMintClaimed: boolean,
-    readonly lastStaker: web3.PublicKey,
-    readonly stakeMintClaimed: boolean
+    readonly rewardMint: web3.PublicKey,
+    readonly poolCount: beet.bignum
   ) {}
 
   /**
-   * Creates a {@link StakeEntry} instance from the provided args.
+   * Creates a {@link Treasury} instance from the provided args.
    */
-  static fromArgs(args: StakeEntryArgs) {
-    return new StakeEntry(
-      args.bump,
-      args.pool,
-      args.amount,
-      args.originalMint,
-      args.originalMintClaimed,
-      args.lastStaker,
-      args.stakeMintClaimed
-    )
+  static fromArgs(args: TreasuryArgs) {
+    return new Treasury(args.bump, args.rewardMint, args.poolCount)
   }
 
   /**
-   * Deserializes the {@link StakeEntry} from the data of the provided {@link web3.AccountInfo}.
+   * Deserializes the {@link Treasury} from the data of the provided {@link web3.AccountInfo}.
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
   static fromAccountInfo(
     accountInfo: web3.AccountInfo<Buffer>,
     offset = 0
-  ): [StakeEntry, number] {
-    return StakeEntry.deserialize(accountInfo.data, offset)
+  ): [Treasury, number] {
+    return Treasury.deserialize(accountInfo.data, offset)
   }
 
   /**
    * Retrieves the account info from the provided address and deserializes
-   * the {@link StakeEntry} from its data.
+   * the {@link Treasury} from its data.
    *
    * @throws Error if no account info is found at the address or if deserialization fails
    */
@@ -79,15 +63,15 @@ export class StakeEntry implements StakeEntryArgs {
     connection: web3.Connection,
     address: web3.PublicKey,
     commitmentOrConfig?: web3.Commitment | web3.GetAccountInfoConfig
-  ): Promise<StakeEntry> {
+  ): Promise<Treasury> {
     const accountInfo = await connection.getAccountInfo(
       address,
       commitmentOrConfig
     )
     if (accountInfo == null) {
-      throw new Error(`Unable to find StakeEntry account at ${address}`)
+      throw new Error(`Unable to find Treasury account at ${address}`)
     }
-    return StakeEntry.fromAccountInfo(accountInfo, 0)[0]
+    return Treasury.fromAccountInfo(accountInfo, 0)[0]
   }
 
   /**
@@ -101,39 +85,39 @@ export class StakeEntry implements StakeEntryArgs {
       '654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess'
     )
   ) {
-    return beetSolana.GpaBuilder.fromStruct(programId, stakeEntryBeet)
+    return beetSolana.GpaBuilder.fromStruct(programId, treasuryBeet)
   }
 
   /**
-   * Deserializes the {@link StakeEntry} from the provided data Buffer.
+   * Deserializes the {@link Treasury} from the provided data Buffer.
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
-  static deserialize(buf: Buffer, offset = 0): [StakeEntry, number] {
-    return stakeEntryBeet.deserialize(buf, offset)
+  static deserialize(buf: Buffer, offset = 0): [Treasury, number] {
+    return treasuryBeet.deserialize(buf, offset)
   }
 
   /**
-   * Serializes the {@link StakeEntry} into a Buffer.
+   * Serializes the {@link Treasury} into a Buffer.
    * @returns a tuple of the created Buffer and the offset up to which the buffer was written to store it.
    */
   serialize(): [Buffer, number] {
-    return stakeEntryBeet.serialize({
-      accountDiscriminator: stakeEntryDiscriminator,
+    return treasuryBeet.serialize({
+      accountDiscriminator: treasuryDiscriminator,
       ...this,
     })
   }
 
   /**
    * Returns the byteSize of a {@link Buffer} holding the serialized data of
-   * {@link StakeEntry}
+   * {@link Treasury}
    */
   static get byteSize() {
-    return stakeEntryBeet.byteSize
+    return treasuryBeet.byteSize
   }
 
   /**
    * Fetches the minimum balance needed to exempt an account holding
-   * {@link StakeEntry} data from rent
+   * {@link Treasury} data from rent
    *
    * @param connection used to retrieve the rent exemption information
    */
@@ -142,29 +126,29 @@ export class StakeEntry implements StakeEntryArgs {
     commitment?: web3.Commitment
   ): Promise<number> {
     return connection.getMinimumBalanceForRentExemption(
-      StakeEntry.byteSize,
+      Treasury.byteSize,
       commitment
     )
   }
 
   /**
    * Determines if the provided {@link Buffer} has the correct byte size to
-   * hold {@link StakeEntry} data.
+   * hold {@link Treasury} data.
    */
   static hasCorrectByteSize(buf: Buffer, offset = 0) {
-    return buf.byteLength - offset === StakeEntry.byteSize
+    return buf.byteLength - offset === Treasury.byteSize
   }
 
   /**
-   * Returns a readable version of {@link StakeEntry} properties
+   * Returns a readable version of {@link Treasury} properties
    * and can be used to convert to JSON and/or logging
    */
   pretty() {
     return {
       bump: this.bump,
-      pool: this.pool.toBase58(),
-      amount: (() => {
-        const x = <{ toNumber: () => number }>this.amount
+      rewardMint: this.rewardMint.toBase58(),
+      poolCount: (() => {
+        const x = <{ toNumber: () => number }>this.poolCount
         if (typeof x.toNumber === 'function') {
           try {
             return x.toNumber()
@@ -174,10 +158,6 @@ export class StakeEntry implements StakeEntryArgs {
         }
         return x
       })(),
-      originalMint: this.originalMint.toBase58(),
-      originalMintClaimed: this.originalMintClaimed,
-      lastStaker: this.lastStaker.toBase58(),
-      stakeMintClaimed: this.stakeMintClaimed,
     }
   }
 }
@@ -186,22 +166,18 @@ export class StakeEntry implements StakeEntryArgs {
  * @category Accounts
  * @category generated
  */
-export const stakeEntryBeet = new beet.BeetStruct<
-  StakeEntry,
-  StakeEntryArgs & {
+export const treasuryBeet = new beet.BeetStruct<
+  Treasury,
+  TreasuryArgs & {
     accountDiscriminator: number[] /* size: 8 */
   }
 >(
   [
     ['accountDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
     ['bump', beet.u8],
-    ['pool', beetSolana.publicKey],
-    ['amount', beet.u64],
-    ['originalMint', beetSolana.publicKey],
-    ['originalMintClaimed', beet.bool],
-    ['lastStaker', beetSolana.publicKey],
-    ['stakeMintClaimed', beet.bool],
+    ['rewardMint', beetSolana.publicKey],
+    ['poolCount', beet.u64],
   ],
-  StakeEntry.fromArgs,
-  'StakeEntry'
+  Treasury.fromArgs,
+  'Treasury'
 )

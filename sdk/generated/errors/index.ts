@@ -438,6 +438,121 @@ createErrorFromNameLookup.set(
 )
 
 /**
+ * InvalidVrfAuthorityError: 'Invalid Vrf Authority Error'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidVrfAuthorityErrorError extends Error {
+  readonly code: number = 0x1782
+  readonly name: string = 'InvalidVrfAuthorityError'
+  constructor() {
+    super('Invalid Vrf Authority Error')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidVrfAuthorityErrorError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1782, () => new InvalidVrfAuthorityErrorError())
+createErrorFromNameLookup.set(
+  'InvalidVrfAuthorityError',
+  () => new InvalidVrfAuthorityErrorError()
+)
+
+/**
+ * InvalidVrfAccount: 'Invalid Vrf Account'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidVrfAccountError extends Error {
+  readonly code: number = 0x1783
+  readonly name: string = 'InvalidVrfAccount'
+  constructor() {
+    super('Invalid Vrf Account')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidVrfAccountError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1783, () => new InvalidVrfAccountError())
+createErrorFromNameLookup.set(
+  'InvalidVrfAccount',
+  () => new InvalidVrfAccountError()
+)
+
+/**
+ * NoResult: 'No Result'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class NoResultError extends Error {
+  readonly code: number = 0x1784
+  readonly name: string = 'NoResult'
+  constructor() {
+    super('No Result')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, NoResultError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1784, () => new NoResultError())
+createErrorFromNameLookup.set('NoResult', () => new NoResultError())
+
+/**
+ * InvalidRewardMint: 'Invalid Reward Mint'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidRewardMintError extends Error {
+  readonly code: number = 0x1785
+  readonly name: string = 'InvalidRewardMint'
+  constructor() {
+    super('Invalid Reward Mint')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidRewardMintError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1785, () => new InvalidRewardMintError())
+createErrorFromNameLookup.set(
+  'InvalidRewardMint',
+  () => new InvalidRewardMintError()
+)
+
+/**
+ * InvalidUserRewardMintTokenAccount: 'Invalid User Reward Mint Token Account'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidUserRewardMintTokenAccountError extends Error {
+  readonly code: number = 0x1786
+  readonly name: string = 'InvalidUserRewardMintTokenAccount'
+  constructor() {
+    super('Invalid User Reward Mint Token Account')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidUserRewardMintTokenAccountError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(
+  0x1786,
+  () => new InvalidUserRewardMintTokenAccountError()
+)
+createErrorFromNameLookup.set(
+  'InvalidUserRewardMintTokenAccount',
+  () => new InvalidUserRewardMintTokenAccountError()
+)
+
+/**
  * Attempts to resolve a custom program error from the provided error code.
  * @category Errors
  * @category generated

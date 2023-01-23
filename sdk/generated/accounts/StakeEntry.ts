@@ -5,52 +5,70 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
+import * as beet from '@metaplex-foundation/beet'
 import * as beetSolana from '@metaplex-foundation/beet-solana'
 
 /**
- * Arguments used to create {@link Identifier}
+ * Arguments used to create {@link StakeEntry}
  * @category Accounts
  * @category generated
  */
-export type IdentifierArgs = {
+export type StakeEntryArgs = {
   bump: number
-  count: beet.bignum
+  pool: web3.PublicKey
+  amount: beet.bignum
+  originalMint: web3.PublicKey
+  originalMintClaimed: boolean
+  lastStaker: web3.PublicKey
 }
 
-export const identifierDiscriminator = [204, 189, 217, 160, 27, 67, 108, 181]
+export const stakeEntryDiscriminator = [187, 127, 9, 35, 155, 68, 86, 40]
 /**
- * Holds the data for the {@link Identifier} Account and provides de/serialization
+ * Holds the data for the {@link StakeEntry} Account and provides de/serialization
  * functionality for that data
  *
  * @category Accounts
  * @category generated
  */
-export class Identifier implements IdentifierArgs {
-  private constructor(readonly bump: number, readonly count: beet.bignum) {}
+export class StakeEntry implements StakeEntryArgs {
+  private constructor(
+    readonly bump: number,
+    readonly pool: web3.PublicKey,
+    readonly amount: beet.bignum,
+    readonly originalMint: web3.PublicKey,
+    readonly originalMintClaimed: boolean,
+    readonly lastStaker: web3.PublicKey
+  ) {}
 
   /**
-   * Creates a {@link Identifier} instance from the provided args.
+   * Creates a {@link StakeEntry} instance from the provided args.
    */
-  static fromArgs(args: IdentifierArgs) {
-    return new Identifier(args.bump, args.count)
+  static fromArgs(args: StakeEntryArgs) {
+    return new StakeEntry(
+      args.bump,
+      args.pool,
+      args.amount,
+      args.originalMint,
+      args.originalMintClaimed,
+      args.lastStaker
+    )
   }
 
   /**
-   * Deserializes the {@link Identifier} from the data of the provided {@link web3.AccountInfo}.
+   * Deserializes the {@link StakeEntry} from the data of the provided {@link web3.AccountInfo}.
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
   static fromAccountInfo(
     accountInfo: web3.AccountInfo<Buffer>,
     offset = 0
-  ): [Identifier, number] {
-    return Identifier.deserialize(accountInfo.data, offset)
+  ): [StakeEntry, number] {
+    return StakeEntry.deserialize(accountInfo.data, offset)
   }
 
   /**
    * Retrieves the account info from the provided address and deserializes
-   * the {@link Identifier} from its data.
+   * the {@link StakeEntry} from its data.
    *
    * @throws Error if no account info is found at the address or if deserialization fails
    */
@@ -58,15 +76,15 @@ export class Identifier implements IdentifierArgs {
     connection: web3.Connection,
     address: web3.PublicKey,
     commitmentOrConfig?: web3.Commitment | web3.GetAccountInfoConfig
-  ): Promise<Identifier> {
+  ): Promise<StakeEntry> {
     const accountInfo = await connection.getAccountInfo(
       address,
       commitmentOrConfig
     )
     if (accountInfo == null) {
-      throw new Error(`Unable to find Identifier account at ${address}`)
+      throw new Error(`Unable to find StakeEntry account at ${address}`)
     }
-    return Identifier.fromAccountInfo(accountInfo, 0)[0]
+    return StakeEntry.fromAccountInfo(accountInfo, 0)[0]
   }
 
   /**
@@ -80,39 +98,39 @@ export class Identifier implements IdentifierArgs {
       '654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess'
     )
   ) {
-    return beetSolana.GpaBuilder.fromStruct(programId, identifierBeet)
+    return beetSolana.GpaBuilder.fromStruct(programId, stakeEntryBeet)
   }
 
   /**
-   * Deserializes the {@link Identifier} from the provided data Buffer.
+   * Deserializes the {@link StakeEntry} from the provided data Buffer.
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
-  static deserialize(buf: Buffer, offset = 0): [Identifier, number] {
-    return identifierBeet.deserialize(buf, offset)
+  static deserialize(buf: Buffer, offset = 0): [StakeEntry, number] {
+    return stakeEntryBeet.deserialize(buf, offset)
   }
 
   /**
-   * Serializes the {@link Identifier} into a Buffer.
+   * Serializes the {@link StakeEntry} into a Buffer.
    * @returns a tuple of the created Buffer and the offset up to which the buffer was written to store it.
    */
   serialize(): [Buffer, number] {
-    return identifierBeet.serialize({
-      accountDiscriminator: identifierDiscriminator,
+    return stakeEntryBeet.serialize({
+      accountDiscriminator: stakeEntryDiscriminator,
       ...this,
     })
   }
 
   /**
    * Returns the byteSize of a {@link Buffer} holding the serialized data of
-   * {@link Identifier}
+   * {@link StakeEntry}
    */
   static get byteSize() {
-    return identifierBeet.byteSize
+    return stakeEntryBeet.byteSize
   }
 
   /**
    * Fetches the minimum balance needed to exempt an account holding
-   * {@link Identifier} data from rent
+   * {@link StakeEntry} data from rent
    *
    * @param connection used to retrieve the rent exemption information
    */
@@ -121,28 +139,29 @@ export class Identifier implements IdentifierArgs {
     commitment?: web3.Commitment
   ): Promise<number> {
     return connection.getMinimumBalanceForRentExemption(
-      Identifier.byteSize,
+      StakeEntry.byteSize,
       commitment
     )
   }
 
   /**
    * Determines if the provided {@link Buffer} has the correct byte size to
-   * hold {@link Identifier} data.
+   * hold {@link StakeEntry} data.
    */
   static hasCorrectByteSize(buf: Buffer, offset = 0) {
-    return buf.byteLength - offset === Identifier.byteSize
+    return buf.byteLength - offset === StakeEntry.byteSize
   }
 
   /**
-   * Returns a readable version of {@link Identifier} properties
+   * Returns a readable version of {@link StakeEntry} properties
    * and can be used to convert to JSON and/or logging
    */
   pretty() {
     return {
       bump: this.bump,
-      count: (() => {
-        const x = <{ toNumber: () => number }>this.count
+      pool: this.pool.toBase58(),
+      amount: (() => {
+        const x = <{ toNumber: () => number }>this.amount
         if (typeof x.toNumber === 'function') {
           try {
             return x.toNumber()
@@ -152,6 +171,9 @@ export class Identifier implements IdentifierArgs {
         }
         return x
       })(),
+      originalMint: this.originalMint.toBase58(),
+      originalMintClaimed: this.originalMintClaimed,
+      lastStaker: this.lastStaker.toBase58(),
     }
   }
 }
@@ -160,17 +182,21 @@ export class Identifier implements IdentifierArgs {
  * @category Accounts
  * @category generated
  */
-export const identifierBeet = new beet.BeetStruct<
-  Identifier,
-  IdentifierArgs & {
+export const stakeEntryBeet = new beet.BeetStruct<
+  StakeEntry,
+  StakeEntryArgs & {
     accountDiscriminator: number[] /* size: 8 */
   }
 >(
   [
     ['accountDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
     ['bump', beet.u8],
-    ['count', beet.u64],
+    ['pool', beetSolana.publicKey],
+    ['amount', beet.u64],
+    ['originalMint', beetSolana.publicKey],
+    ['originalMintClaimed', beet.bool],
+    ['lastStaker', beetSolana.publicKey],
   ],
-  Identifier.fromArgs,
-  'Identifier'
+  StakeEntry.fromArgs,
+  'StakeEntry'
 )

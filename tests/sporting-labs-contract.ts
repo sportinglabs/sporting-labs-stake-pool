@@ -1,16 +1,24 @@
-import * as anchor from "@project-serum/anchor";
-import { Program } from "@project-serum/anchor";
-import { SportingLabsContract } from "../target/types/sporting_labs_contract";
+require("dotenv").config();
+import { Wallet, BN } from "@project-serum/anchor";
+import { Connection, Keypair } from "@solana/web3.js"
+import { readFileSync } from "fs";
+import { createTreasuryAuthority } from "../sdk";
 
 describe("sporting-labs-contract", () => {
   // Configure the client to use the local cluster.
-  anchor.setProvider(anchor.AnchorProvider.env());
+  const connection = new Connection("https://solana-devnet.g.alchemy.com/v2/T9bjWGVG22puNBe91XFY_hE4lhR7hkgk")
 
-  const program = anchor.workspace.SportingLabsContract as Program<SportingLabsContract>;
+  const kp = Keypair.fromSecretKey(Uint8Array.from(
+    JSON.parse(readFileSync(process.env.KEYPAIR, { encoding: "utf-8"}))
+  ))
 
-  it("Is initialized!", async () => {
+  const wallet = new Wallet(kp);
+
+  it("It creates treasury!", async () => {
     // Add your test here.
-    const tx = await program.methods.initialize().rpc();
-    console.log("Your transaction signature", tx);
+    const res = await createTreasuryAuthority(connection, wallet);
+    console.log(res);
+    
   });
+
 });

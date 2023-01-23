@@ -37,7 +37,8 @@ export const initPoolStruct = new beet.FixableBeetArgsStruct<
  * Accounts required by the _initPool_ instruction
  *
  * @property [_writable_] stakePool
- * @property [_writable_] identifier
+ * @property [_writable_] treasury
+ * @property [] vrf
  * @property [_writable_, **signer**] payer
  * @category Instructions
  * @category InitPool
@@ -45,7 +46,8 @@ export const initPoolStruct = new beet.FixableBeetArgsStruct<
  */
 export type InitPoolInstructionAccounts = {
   stakePool: web3.PublicKey
-  identifier: web3.PublicKey
+  treasury: web3.PublicKey
+  vrf: web3.PublicKey
   payer: web3.PublicKey
   systemProgram?: web3.PublicKey
   anchorRemainingAccounts?: web3.AccountMeta[]
@@ -81,8 +83,13 @@ export function createInitPoolInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.identifier,
+      pubkey: accounts.treasury,
       isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.vrf,
+      isWritable: false,
       isSigner: false,
     },
     {

@@ -1,3 +1,4 @@
+pub mod init_treasury;
 pub mod claim_receipt_mint;
 pub mod close_stake_entry;
 pub mod close_stake_pool;
@@ -13,6 +14,7 @@ pub mod update_pool;
 pub mod request_randomness;
 pub mod consume_randomness;
 
+pub use init_treasury::*;
 pub use claim_receipt_mint::*;
 pub use close_stake_entry::*;
 pub use close_stake_pool::*;

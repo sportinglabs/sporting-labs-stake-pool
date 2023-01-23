@@ -14,6 +14,10 @@ declare_id!("654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess");
 pub mod sporting_labs_stake_pool {
     use super::*;
 
+    pub fn init_treasury(ctx: Context<InitTreasuryCtx>) -> Result<()> {
+        init_treasury::handler(ctx)
+    }
+
     pub fn init_identifier(ctx: Context<InitIdentifierCtx>) -> Result<()> {
         init_identifier::handler(ctx)
     }

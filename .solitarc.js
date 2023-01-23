@@ -1,7 +1,7 @@
 const path = require('path');
 const programDir = path.join(__dirname, 'programs/sporting-labs-stake-pool');
 const idlDir = path.join(__dirname, 'idl');
-const sdkDir = path.join(__dirname, 'src', 'stake_pool');
+const sdkDir = path.join(__dirname, 'sdk', 'generated');
 const binaryInstallDir = path.join(__dirname, '.crates');
 
 module.exports = {

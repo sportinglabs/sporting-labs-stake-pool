@@ -8,6 +8,7 @@ use {
 pub struct UnstakeCtx<'info> {
     #[account(mut)]
     stake_pool: Box<Account<'info, StakePool>>,
+    treasury_authority: Account<'info, TreasuryAuthority>,
     #[account(mut, constraint = stake_entry.pool == stake_pool.key() @ ErrorCode::InvalidStakePool)]
     stake_entry: Box<Account<'info, StakeEntry>>,
 
@@ -22,11 +23,9 @@ pub struct UnstakeCtx<'info> {
     stake_entry_original_mint_token_account: Box<Account<'info, TokenAccount>>,
 
     // reward distribution
-    #[account(mut)]
-    stake_pool_token_account: Account<'info, TokenAccount>,
     #[account(mut, constraint = user_reward_mint_token_account.mint == stake_pool.reward_mint && user_reward_mint_token_account.owner == user.key() @ ErrorCode::InvalidUserRewardMintTokenAccount)]
     user_reward_mint_token_account: Account<'info, TokenAccount>,
-    #[account(mut, constraint = reward_mint.key() == stake_pool.reward_mint @ ErrorCode::InvalidRewardMint)]
+    #[account(mut, constraint = reward_mint.key() == treasury_authority.reward_mint @ ErrorCode::InvalidRewardMint)]
     reward_mint: Account<'info, Mint>,
 
     // user
@@ -44,11 +43,11 @@ pub struct UnstakeCtx<'info> {
 
 pub fn handler(ctx: Context<UnstakeCtx>) -> Result<()> {
     let stake_pool = &mut ctx.accounts.stake_pool;
+    let treasury_authority = &mut ctx.accounts.treasury_authority;
     let stake_entry = &mut ctx.accounts.stake_entry;
-    let stake_pool_token_account = &mut ctx.accounts.stake_pool_token_account;
-    let bump = stake_pool.bump.clone();
-    let identifier_num = stake_pool.identifier.to_le_bytes();
-    let stake_pool_seeds: &[&[&[u8]]] = &[&[&STAKE_POOL_PREFIX.as_bytes(), identifier_num.as_ref(), &[bump]]];
+
+    let bump = treasury_authority.bump.clone();
+    let treasury_authority_seeds: &[&[&[u8]]] = &[&[&TREASURY_AUTHORITY_PREFIX.as_bytes(), &[bump]]];
 
     if stake_pool.pool_state == PoolState::ActiveRace as u8 {
         return Err(error!(ErrorCode::RaceIsOngoing));
@@ -65,18 +64,16 @@ pub fn handler(ctx: Context<UnstakeCtx>) -> Result<()> {
             reward_amount_to_receive += 20;
         }
 
-        // Transfer soulbound tokens
-        let cpi_accounts = token::Transfer {
-                from: stake_pool_token_account.to_account_info(),
-                to: ctx.accounts.user_reward_mint_token_account.to_account_info(),
-                authority: stake_pool.to_account_info(),
+        // Mint soulbound tokens
+        let cpi_accounts = token::MintTo {
+            mint: ctx.accounts.reward_mint.to_account_info(),
+            to: ctx.accounts.user_reward_mint_token_account.to_account_info(),
+            authority: treasury_authority.to_account_info(),
         };
         let cpi_program = ctx.accounts.token_program.to_account_info();
-        let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(stake_pool_seeds);
-        // todo this could be an issue and get stuck, might need 2 transfers
-        token::transfer(cpi_context, reward_amount_to_receive.try_into().expect("Too many rewards to receive"))?;
+        let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(treasury_authority_seeds);
+        token::mint_to(cpi_context, reward_amount_to_receive.try_into().expect("Too many rewards to receive"))?;
     }
-
 
     // Set up keys to return NFT
     let original_mint = stake_entry.original_mint;

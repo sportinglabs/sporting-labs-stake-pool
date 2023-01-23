@@ -43,5 +43,9 @@ pub enum ErrorCode {
     #[msg("Invalid Vrf Account")]
     InvalidVrfAccount,
     #[msg("No Result")]
-    NoResult
+    NoResult,
+    #[msg("Invalid Reward Mint")]
+    InvalidRewardMint,
+    #[msg("Invalid User Reward Mint Token Account")]
+    InvalidUserRewardMintTokenAccount,
 }

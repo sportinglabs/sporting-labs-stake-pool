@@ -13,13 +13,21 @@ pub struct UnstakeCtx<'info> {
 
     original_mint: Box<Account<'info, Mint>>,
 
-    // stake_entry token accounts
+    // stake_entry token account
     #[account(mut, constraint =
         (stake_entry_original_mint_token_account.amount > 0)
         && stake_entry_original_mint_token_account.mint == stake_entry.original_mint
         && stake_entry_original_mint_token_account.owner == stake_entry.key()
         @ ErrorCode::InvalidStakeEntryOriginalMintTokenAccount)]
     stake_entry_original_mint_token_account: Box<Account<'info, TokenAccount>>,
+
+    // reward distribution
+    #[account(mut)]
+    stake_pool_token_account: Account<'info, TokenAccount>,
+    #[account(mut, constraint = user_reward_mint_token_account.mint == stake_pool.reward_mint && user_reward_mint_token_account.owner == user.key() @ ErrorCode::InvalidUserRewardMintTokenAccount)]
+    user_reward_mint_token_account: Account<'info, TokenAccount>,
+    #[account(mut, constraint = reward_mint.key() == stake_pool.reward_mint @ ErrorCode::InvalidRewardMint)]
+    reward_mint: Account<'info, Mint>,
 
     // user
     #[account(mut, constraint = user.key() == stake_entry.last_staker @ ErrorCode::InvalidUnstakeUser)]
@@ -37,17 +45,40 @@ pub struct UnstakeCtx<'info> {
 pub fn handler(ctx: Context<UnstakeCtx>) -> Result<()> {
     let stake_pool = &mut ctx.accounts.stake_pool;
     let stake_entry = &mut ctx.accounts.stake_entry;
+    let stake_pool_token_account = &mut ctx.accounts.stake_pool_token_account;
+    let bump = stake_pool.bump.clone();
+    let identifier_num = stake_pool.identifier.to_le_bytes();
+    let stake_pool_seeds: &[&[&[u8]]] = &[&[&STAKE_POOL_PREFIX.as_bytes(), identifier_num.as_ref(), &[bump]]];
 
     if stake_pool.pool_state == PoolState::ActiveRace as u8 {
         return Err(error!(ErrorCode::RaceIsOngoing));
     }
 
-    if  stake_pool.result == 0 {
-        return Err(error!(ErrorCode::NoResult));
+    if  stake_pool.result != 0 {
+        // TODO: Assert F1 car traits
+
+        let mut reward_amount_to_receive: u64 = 0;
+
+        let wheel_trait = RaceResult::Dry;
+
+        if stake_pool.result == wheel_trait as u8 {
+            reward_amount_to_receive += 20;
+        }
+
+        // Transfer soulbound tokens
+        let cpi_accounts = token::Transfer {
+                from: stake_pool_token_account.to_account_info(),
+                to: ctx.accounts.user_reward_mint_token_account.to_account_info(),
+                authority: stake_pool.to_account_info(),
+        };
+        let cpi_program = ctx.accounts.token_program.to_account_info();
+        let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(stake_pool_seeds);
+        // todo this could be an issue and get stuck, might need 2 transfers
+        token::transfer(cpi_context, reward_amount_to_receive.try_into().expect("Too many rewards to receive"))?;
     }
 
-    // TODO: Assert F1 car traits
 
+    // Set up keys to return NFT
     let original_mint = stake_entry.original_mint;
     let user = ctx.accounts.user.key();
     let stake_pool_key = stake_pool.key();

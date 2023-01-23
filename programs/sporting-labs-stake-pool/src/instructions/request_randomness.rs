@@ -10,7 +10,7 @@ use {
 pub struct RequestRandomness<'info> {
     #[account(
         mut,
-        seeds = [STAKE_POOL_PREFIX.as_bytes(), params.identifier.to_le_bytes().as_ref()],
+        seeds = [STAKE_POOL_PREFIX.as_bytes(), stake_pool.identifier.to_le_bytes().as_ref()],
         bump = params.bump,
         has_one = vrf @ ErrorCode::InvalidVrfAccount
     )]
@@ -73,7 +73,6 @@ pub struct RequestRandomness<'info> {
 pub struct RequestRandomnessParams {
     pub permission_bump: u8,
     pub switchboard_state_bump: u8,
-    pub identifier: u16,
     pub bump: u8
 }
 
@@ -103,7 +102,7 @@ impl RequestRandomness<'_> {
             token_program: ctx.accounts.token_program.to_account_info(),
         };
 
-        let identifier_num = params.identifier.to_le_bytes();
+        let identifier_num = stake_pool.identifier.to_le_bytes();
 
         let stake_pool_seeds: &[&[&[u8]]] = &[&[&STAKE_POOL_PREFIX.as_bytes(), identifier_num.as_ref(), &[bump]]];
 

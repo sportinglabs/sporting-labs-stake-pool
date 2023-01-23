@@ -18,7 +18,6 @@ pub struct StakeEntry {
     pub original_mint: Pubkey,
     pub original_mint_claimed: bool,
     pub last_staker: Pubkey,
-    pub stake_mint_claimed: bool,
 }
 
 pub enum PoolState {

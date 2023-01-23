@@ -41,5 +41,7 @@ pub enum ErrorCode {
     #[msg("Invalid Vrf Authority Error")]
     InvalidVrfAuthorityError,
     #[msg("Invalid Vrf Account")]
-    InvalidVrfAccount
+    InvalidVrfAccount,
+    #[msg("No Result")]
+    NoResult
 }

@@ -42,6 +42,12 @@ pub fn handler(ctx: Context<UnstakeCtx>) -> Result<()> {
         return Err(error!(ErrorCode::RaceIsOngoing));
     }
 
+    if  stake_pool.result == 0 {
+        return Err(error!(ErrorCode::NoResult));
+    }
+
+    // TODO: Assert F1 car traits
+
     let original_mint = stake_entry.original_mint;
     let user = ctx.accounts.user.key();
     let stake_pool_key = stake_pool.key();
@@ -61,7 +67,6 @@ pub fn handler(ctx: Context<UnstakeCtx>) -> Result<()> {
 
     stake_entry.last_staker = Pubkey::default();
     stake_entry.original_mint_claimed = false;
-    stake_entry.stake_mint_claimed = false;
     stake_entry.amount = 0;
     stake_pool.total_staked = stake_pool.total_staked.checked_sub(1).expect("Sub error");
     stake_entry_fill_zeros(stake_entry)?;

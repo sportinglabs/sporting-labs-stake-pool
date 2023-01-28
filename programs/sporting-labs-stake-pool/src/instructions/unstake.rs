@@ -73,6 +73,16 @@ pub fn handler(ctx: Context<UnstakeCtx>) -> Result<()> {
         let cpi_program = ctx.accounts.token_program.to_account_info();
         let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(treasury_authority_seeds);
         token::mint_to(cpi_context, reward_amount_to_receive.try_into().expect("Too many rewards to receive"))?;
+
+        // Freeze token account
+        let cpi_accounts = token::FreezeAccount {
+            account: ctx.accounts.user_reward_mint_token_account.to_account_info(),
+            mint: ctx.accounts.reward_mint.to_account_info(),
+            authority: treasury.to_account_info(),
+        };
+        let cpi_program = ctx.accounts.token_program.to_account_info();
+        let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(treasury_authority_seeds);
+        token::freeze_account(cpi_context)?;
     }
 
     // Set up keys to return NFT

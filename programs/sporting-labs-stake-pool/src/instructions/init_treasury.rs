@@ -36,6 +36,6 @@ pub fn handler(ctx: Context<InitTreasuryCtx>) -> Result<()> {
   let cpi_program = ctx.accounts.token_program.to_account_info();
   let cpi_context = CpiContext::new(cpi_program, cpi_accounts);
   token::set_authority(cpi_context, AuthorityType::MintTokens, Some(treasury.key()))?;
-      
+  // TODO: Set freeze authority
   Ok(())
 }

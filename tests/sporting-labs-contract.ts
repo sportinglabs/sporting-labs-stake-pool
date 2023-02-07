@@ -2,9 +2,7 @@ require("dotenv").config();
 import { Wallet, BN } from "@project-serum/anchor";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js"
 import { readFileSync } from "fs";
-import { createTreasuryAuthority } from "../sdk";
-import { stake, unstake } from "../sdk/src/nftActions";
-import { createPool, updatePool } from "../sdk/src/poolActions";
+import { createTreasuryAuthority, getAllPools, createPool, updatePool, stake, unstake } from "../sdk";
 
 describe("sporting-labs-contract", () => {
   // Configure the client to use the local cluster.
@@ -35,13 +33,16 @@ describe("sporting-labs-contract", () => {
     // const res = await unstake(connection, wallet, mint)
     // console.log(res);
 
-    const res = await updatePool(connection, wallet, 1, {
-      requiresCreators: [],
-      authority: wallet.publicKey,
-      poolState: 1
-    })
+    // const res = await updatePool(connection, wallet, 1, {
+    //   requiresCreators: [],
+    //   authority: wallet.publicKey,
+    //   poolState: 1
+    // })
 
-    console.log(res);
+    // console.log(res);
+
+    const allPools = await getAllPools(connection);
+    console.log(allPools);
 
   });
 

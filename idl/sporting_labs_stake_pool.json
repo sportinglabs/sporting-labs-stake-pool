@@ -47,11 +47,6 @@
           "isSigner": false
         },
         {
-          "name": "vrf",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "payer",
           "isMut": true,
           "isSigner": true
@@ -427,110 +422,6 @@
         }
       ],
       "args": []
-    },
-    {
-      "name": "requestRandomness",
-      "accounts": [
-        {
-          "name": "stakePool",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vrf",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "oracleQueue",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "queueAuthority",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "dataBuffer",
-          "isMut": true,
-          "isSigner": false,
-          "docs": [
-            "CHECK"
-          ]
-        },
-        {
-          "name": "permission",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "escrow",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "programState",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "switchboardProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payerWallet",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "payerAuthority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "recentBlockhashes",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "params",
-          "type": {
-            "defined": "RequestRandomnessParams"
-          }
-        }
-      ]
-    },
-    {
-      "name": "consumeRandomness",
-      "accounts": [
-        {
-          "name": "stakePool",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vrf",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "params",
-          "type": {
-            "defined": "ConsumeRandomnessParams"
-          }
-        }
-      ]
     }
   ],
   "accounts": [
@@ -622,10 +513,6 @@
             "type": "u8"
           },
           {
-            "name": "vrf",
-            "type": "publicKey"
-          },
-          {
             "name": "rewardMint",
             "type": "publicKey"
           }
@@ -634,22 +521,6 @@
     }
   ],
   "types": [
-    {
-      "name": "ConsumeRandomnessParams",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "bump",
-            "type": "u8"
-          },
-          {
-            "name": "identifier",
-            "type": "u32"
-          }
-        ]
-      }
-    },
     {
       "name": "InitPoolIx",
       "type": {
@@ -664,26 +535,6 @@
           {
             "name": "authority",
             "type": "publicKey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "RequestRandomnessParams",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "permissionBump",
-            "type": "u8"
-          },
-          {
-            "name": "switchboardStateBump",
-            "type": "u8"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
           }
         ]
       }
@@ -860,7 +711,7 @@
     }
   ],
   "metadata": {
-    "address": "654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess",
+    "address": "41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB",
     "origin": "anchor",
     "binaryVersion": "0.25.0",
     "libVersion": "0.25.0"

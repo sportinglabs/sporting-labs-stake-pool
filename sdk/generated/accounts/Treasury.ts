@@ -82,7 +82,7 @@ export class Treasury implements TreasuryArgs {
    */
   static gpaBuilder(
     programId: web3.PublicKey = new web3.PublicKey(
-      '654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess'
+      '41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB'
     )
   ) {
     return beetSolana.GpaBuilder.fromStruct(programId, treasuryBeet)

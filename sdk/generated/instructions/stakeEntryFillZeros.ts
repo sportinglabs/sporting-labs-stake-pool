@@ -46,7 +46,7 @@ export const stakeEntryFillZerosInstructionDiscriminator = [
  */
 export function createStakeEntryFillZerosInstruction(
   accounts: StakeEntryFillZerosInstructionAccounts,
-  programId = new web3.PublicKey('654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess')
+  programId = new web3.PublicKey('41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB')
 ) {
   const [data] = stakeEntryFillZerosStruct.serialize({
     instructionDiscriminator: stakeEntryFillZerosInstructionDiscriminator,

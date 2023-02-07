@@ -2,10 +2,10 @@
 seeds = false
 skip-lint = false
 [programs.localnet]
-sporting_labs_stake_pool = "654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess"
+sporting_labs_stake_pool = "41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB"
 
 [programs.devnet]
-sporting_labs_stake_pool = "654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess"
+sporting_labs_stake_pool = "41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB"
 
 [registry]
 url = "https://api.apr.dev"

@@ -22,7 +22,6 @@ export type StakePoolArgs = {
   totalStaked: number
   poolState: number
   result: number
-  vrf: web3.PublicKey
   rewardMint: web3.PublicKey
 }
 
@@ -43,7 +42,6 @@ export class StakePool implements StakePoolArgs {
     readonly totalStaked: number,
     readonly poolState: number,
     readonly result: number,
-    readonly vrf: web3.PublicKey,
     readonly rewardMint: web3.PublicKey
   ) {}
 
@@ -59,7 +57,6 @@ export class StakePool implements StakePoolArgs {
       args.totalStaked,
       args.poolState,
       args.result,
-      args.vrf,
       args.rewardMint
     )
   }
@@ -104,7 +101,7 @@ export class StakePool implements StakePoolArgs {
    */
   static gpaBuilder(
     programId: web3.PublicKey = new web3.PublicKey(
-      '654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess'
+      '41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB'
     )
   ) {
     return beetSolana.GpaBuilder.fromStruct(programId, stakePoolBeet)
@@ -186,7 +183,6 @@ export class StakePool implements StakePoolArgs {
       totalStaked: this.totalStaked,
       poolState: this.poolState,
       result: this.result,
-      vrf: this.vrf.toBase58(),
       rewardMint: this.rewardMint.toBase58(),
     }
   }
@@ -211,7 +207,6 @@ export const stakePoolBeet = new beet.FixableBeetStruct<
     ['totalStaked', beet.u32],
     ['poolState', beet.u8],
     ['result', beet.u8],
-    ['vrf', beetSolana.publicKey],
     ['rewardMint', beetSolana.publicKey],
   ],
   StakePool.fromArgs,

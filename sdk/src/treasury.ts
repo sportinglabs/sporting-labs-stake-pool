@@ -9,7 +9,7 @@ import { createInitTreasuryInstruction, PROGRAM_ID } from "../generated";
 
 export const createTreasuryAuthority = async(connection: Connection, wallet: any) => {
 
-  const mintKp = Keypair.generate()
+  const mintKp = Keypair.generate();  
 
   const tx = new Transaction
 

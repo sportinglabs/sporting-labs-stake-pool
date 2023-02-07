@@ -1,6 +1,4 @@
-export * from './ConsumeRandomnessParams'
 export * from './InitPoolIx'
 export * from './PoolState'
 export * from './RaceResult'
-export * from './RequestRandomnessParams'
 export * from './UpdatePoolIx'

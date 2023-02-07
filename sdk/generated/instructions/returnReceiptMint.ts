@@ -63,7 +63,7 @@ export const returnReceiptMintInstructionDiscriminator = [
  */
 export function createReturnReceiptMintInstruction(
   accounts: ReturnReceiptMintInstructionAccounts,
-  programId = new web3.PublicKey('654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess')
+  programId = new web3.PublicKey('41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB')
 ) {
   const [data] = returnReceiptMintStruct.serialize({
     instructionDiscriminator: returnReceiptMintInstructionDiscriminator,

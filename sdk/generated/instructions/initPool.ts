@@ -38,7 +38,6 @@ export const initPoolStruct = new beet.FixableBeetArgsStruct<
  *
  * @property [_writable_] stakePool
  * @property [_writable_] treasury
- * @property [] vrf
  * @property [_writable_, **signer**] payer
  * @category Instructions
  * @category InitPool
@@ -47,7 +46,6 @@ export const initPoolStruct = new beet.FixableBeetArgsStruct<
 export type InitPoolInstructionAccounts = {
   stakePool: web3.PublicKey
   treasury: web3.PublicKey
-  vrf: web3.PublicKey
   payer: web3.PublicKey
   systemProgram?: web3.PublicKey
   anchorRemainingAccounts?: web3.AccountMeta[]
@@ -70,7 +68,7 @@ export const initPoolInstructionDiscriminator = [
 export function createInitPoolInstruction(
   accounts: InitPoolInstructionAccounts,
   args: InitPoolInstructionArgs,
-  programId = new web3.PublicKey('654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess')
+  programId = new web3.PublicKey('41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB')
 ) {
   const [data] = initPoolStruct.serialize({
     instructionDiscriminator: initPoolInstructionDiscriminator,
@@ -85,11 +83,6 @@ export function createInitPoolInstruction(
     {
       pubkey: accounts.treasury,
       isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.vrf,
-      isWritable: false,
       isSigner: false,
     },
     {

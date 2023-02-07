@@ -7,7 +7,7 @@ const binaryInstallDir = path.join(__dirname, '.crates');
 module.exports = {
   idlGenerator: 'anchor',
   programName: 'sporting_labs_stake_pool',
-  programId: '654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess',
+  programId: '41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB',
   idlDir,
   sdkDir,
   binaryInstallDir,

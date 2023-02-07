@@ -47,7 +47,7 @@ pub struct StakePool {
     pub total_staked: u32,
     pub pool_state: u8,
     pub result: u8,
-    pub vrf: Pubkey,
+    // pub vrf: Pubkey,
     pub reward_mint: Pubkey,
 }
 

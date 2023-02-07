@@ -26,7 +26,9 @@ pub struct InitTreasuryCtx<'info> {
 pub fn handler(ctx: Context<InitTreasuryCtx>) -> Result<()> {
 
   let treasury = &mut ctx.accounts.treasury;
+  treasury.bump = *ctx.bumps.get("treasury").unwrap();
   treasury.pool_count = 1;
+  treasury.reward_mint = ctx.accounts.reward_mint.key();
     
   let cpi_accounts = SetAuthority {
     account_or_mint: ctx.accounts.reward_mint.to_account_info(),

@@ -1,7 +1,6 @@
 use {
-    crate::{state::*, errors::ErrorCode},
+    crate::state::*,
     anchor_lang::prelude::*,
-    switchboard_v2::VrfAccountData,
 };
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
@@ -23,10 +22,6 @@ pub struct InitPoolCtx<'info> {
     stake_pool: Account<'info, StakePool>,
     #[account(mut)]
     treasury: Account<'info, Treasury>,
-    #[account(
-        constraint = vrf.load()?.authority == stake_pool.key() @ ErrorCode::InvalidVrfAuthorityError
-    )]
-    vrf: AccountLoader<'info, VrfAccountData>,
     #[account(mut)]
     payer: Signer<'info>,
     system_program: Program<'info, System>,
@@ -34,17 +29,16 @@ pub struct InitPoolCtx<'info> {
 
 pub fn handler(ctx: Context<InitPoolCtx>, ix: InitPoolIx) -> Result<()> {
     let stake_pool = &mut ctx.accounts.stake_pool;
-    let identifier = &mut ctx.accounts.treasury;
+    let treasury = &mut ctx.accounts.treasury;
     stake_pool.bump = *ctx.bumps.get("stake_pool").unwrap();
-    stake_pool.identifier = identifier.pool_count;
+    stake_pool.identifier = treasury.pool_count;
     stake_pool.requires_creators = ix.requires_creators;
     stake_pool.authority = ix.authority;
     stake_pool.total_staked = 0;
     stake_pool.pool_state = PoolState::PreRace as u8;
     stake_pool.result = 0;
-    stake_pool.vrf = ctx.accounts.vrf.key();
+    stake_pool.reward_mint = treasury.reward_mint;
 
-    identifier.pool_count += 1;
-    
+    treasury.pool_count += 1;
     Ok(())
 }

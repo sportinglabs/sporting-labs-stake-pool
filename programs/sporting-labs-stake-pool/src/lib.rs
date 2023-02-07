@@ -8,7 +8,7 @@ use {
     instructions::*,
 };
 
-declare_id!("654kE3ccD76txX3nrP8Q2FTxjD82qk6XrcoJZYZ1cess");
+declare_id!("41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB");
 
 #[program]
 pub mod sporting_labs_stake_pool {
@@ -62,19 +62,19 @@ pub mod sporting_labs_stake_pool {
         stake_pool_fill_zeros::handler(ctx)
     }
 
-    #[access_control(ctx.accounts.validate(&ctx, &params))]
-    pub fn request_randomness(
-        ctx: Context<RequestRandomness>,
-        params: RequestRandomnessParams,
-    ) -> Result<()> {
-        RequestRandomness::actuate(&ctx, &params)
-    }
+    // #[access_control(ctx.accounts.validate(&ctx, &params))]
+    // pub fn request_randomness(
+    //     ctx: Context<RequestRandomness>,
+    //     params: RequestRandomnessParams,
+    // ) -> Result<()> {
+    //     RequestRandomness::actuate(&ctx, &params)
+    // }
 
-    #[access_control(ctx.accounts.validate(&ctx, &params))]
-    pub fn consume_randomness(
-        ctx: Context<ConsumeRandomness>,
-        params: ConsumeRandomnessParams,
-    ) -> Result<()> {
-        ConsumeRandomness::actuate(ctx, &params)
-    }
+    // #[access_control(ctx.accounts.validate(&ctx, &params))]
+    // pub fn consume_randomness(
+    //     ctx: Context<ConsumeRandomness>,
+    //     params: ConsumeRandomnessParams,
+    // ) -> Result<()> {
+    //     ConsumeRandomness::actuate(ctx, &params)
+    // }
 }

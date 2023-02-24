@@ -80,6 +80,11 @@
           "isSigner": false
         },
         {
+          "name": "player",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "originalMint",
           "isMut": false,
           "isSigner": false
@@ -249,6 +254,11 @@
         },
         {
           "name": "originalMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "player",
           "isMut": false,
           "isSigner": false
         },
@@ -708,10 +718,15 @@
       "code": 6022,
       "name": "InvalidUserRewardMintTokenAccount",
       "msg": "Invalid User Reward Mint Token Account"
+    },
+    {
+      "code": 6023,
+      "name": "InvalidPlayerItems",
+      "msg": "Invalid Player Items"
     }
   ],
   "metadata": {
-    "address": "41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB",
+    "address": "D157bctkZhtTUqqESJ8QVUcVJHaGqTz1zaKSQPnxwdLc",
     "origin": "anchor",
     "binaryVersion": "0.25.0",
     "libVersion": "0.25.0"

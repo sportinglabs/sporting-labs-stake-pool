@@ -50,7 +50,7 @@ export const closeStakeEntryInstructionDiscriminator = [
  */
 export function createCloseStakeEntryInstruction(
   accounts: CloseStakeEntryInstructionAccounts,
-  programId = new web3.PublicKey('41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB')
+  programId = new web3.PublicKey('D157bctkZhtTUqqESJ8QVUcVJHaGqTz1zaKSQPnxwdLc')
 ) {
   const [data] = closeStakeEntryStruct.serialize({
     instructionDiscriminator: closeStakeEntryInstructionDiscriminator,

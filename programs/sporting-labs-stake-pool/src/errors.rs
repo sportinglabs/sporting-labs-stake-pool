@@ -48,4 +48,6 @@ pub enum ErrorCode {
     InvalidRewardMint,
     #[msg("Invalid User Reward Mint Token Account")]
     InvalidUserRewardMintTokenAccount,
+    #[msg("Invalid Player Items")]
+    InvalidPlayerItems,
 }

@@ -101,7 +101,7 @@ export class StakePool implements StakePoolArgs {
    */
   static gpaBuilder(
     programId: web3.PublicKey = new web3.PublicKey(
-      '41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB'
+      'D157bctkZhtTUqqESJ8QVUcVJHaGqTz1zaKSQPnxwdLc'
     )
   ) {
     return beetSolana.GpaBuilder.fromStruct(programId, stakePoolBeet)

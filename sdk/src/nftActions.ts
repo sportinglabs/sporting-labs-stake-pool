@@ -6,7 +6,7 @@ import { findTokenManagerAddress, findMintCounterId } from "@cardinal/token-mana
 import { getRemainingAccountsForKind, getRemainingAccountsForInvalidate, TOKEN_MANAGER_ADDRESS } from "@cardinal/token-manager/dist/cjs/programs/tokenManager";
 import { ASSOCIATED_PROGRAM_ID } from "@project-serum/anchor/dist/cjs/utils/token";
 import { tryFn } from "./utils";
-import { getPlayerPDA } from "@raindrops-protocol/raindrops/build/utils/pda";
+import { Utils } from "@raindrops-protocol/raindrops";
 
 export const stake = async(connection: Connection, wallet: any, originalMint: PublicKey) => {
 
@@ -32,6 +32,9 @@ export const stake = async(connection: Connection, wallet: any, originalMint: Pu
     new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
   );
 
+  // raindrops
+  const [playerPda] = await Utils.PDA.getPlayerPDA(originalMint, new BN(22));
+
   const tx = new Transaction()
 
   tx.add(
@@ -39,6 +42,7 @@ export const stake = async(connection: Connection, wallet: any, originalMint: Pu
       stakeEntry: stakeEntryPda,
       stakePool: stakePoolPda,
       originalMint: originalMint,
+      player: playerPda,
       originalMintMetadata: originalMintMetadata,
       payer: wallet.publicKey,
       }, {
@@ -160,12 +164,16 @@ export const unstake = async(connection: Connection, wallet: any, originalMint: 
   const userRewardMintTokenAccount = await tryFn(() => connection.getAccountInfo(userRewardMintAddress));  
   if (!userRewardMintTokenAccount) { tx.add(createAssociatedTokenAccountInstruction(wallet.publicKey, userRewardMintAddress, wallet.publicKey, stakePoolAcc.rewardMint)) }
 
+  // raindrops
+  const [playerPda] = await Utils.PDA.getPlayerPDA(originalMint, new BN(22))
+
   tx.add(
     createUnstakeInstruction({
       stakePool: stakePoolPda,
       treasury: treasuryPda,
       stakeEntry: stakeEntryPda,
       originalMint: originalMint,
+      player: playerPda,
       stakeEntryOriginalMintTokenAccount: stakeEntryOriginalMintAddress,
       userRewardMintTokenAccount: userRewardMintAddress,
       rewardMint: stakePoolAcc.rewardMint,

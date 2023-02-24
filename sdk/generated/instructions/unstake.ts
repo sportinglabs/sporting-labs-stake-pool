@@ -27,6 +27,7 @@ export const unstakeStruct = new beet.BeetArgsStruct<{
  * @property [] treasury
  * @property [_writable_] stakeEntry
  * @property [] originalMint
+ * @property [] player
  * @property [_writable_] stakeEntryOriginalMintTokenAccount
  * @property [_writable_] userRewardMintTokenAccount
  * @property [_writable_] rewardMint
@@ -41,6 +42,7 @@ export type UnstakeInstructionAccounts = {
   treasury: web3.PublicKey
   stakeEntry: web3.PublicKey
   originalMint: web3.PublicKey
+  player: web3.PublicKey
   stakeEntryOriginalMintTokenAccount: web3.PublicKey
   userRewardMintTokenAccount: web3.PublicKey
   rewardMint: web3.PublicKey
@@ -64,7 +66,7 @@ export const unstakeInstructionDiscriminator = [
  */
 export function createUnstakeInstruction(
   accounts: UnstakeInstructionAccounts,
-  programId = new web3.PublicKey('41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB')
+  programId = new web3.PublicKey('D157bctkZhtTUqqESJ8QVUcVJHaGqTz1zaKSQPnxwdLc')
 ) {
   const [data] = unstakeStruct.serialize({
     instructionDiscriminator: unstakeInstructionDiscriminator,
@@ -87,6 +89,11 @@ export function createUnstakeInstruction(
     },
     {
       pubkey: accounts.originalMint,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.player,
       isWritable: false,
       isSigner: false,
     },

@@ -6,6 +6,7 @@ use {
     anchor_spl::token::Mint,
     mpl_token_metadata::state::Metadata,
     mpl_token_metadata::{self},
+    raindrops_player::Player
 };
 
 #[derive(Accounts)]
@@ -22,6 +23,8 @@ pub struct InitEntryCtx<'info> {
     #[account(mut)]
     stake_pool: Box<Account<'info, StakePool>>,
 
+    player: Box<Account<'info, Player>>,
+
     original_mint: Box<Account<'info, Mint>>,
     /// CHECK: This is not dangerous because we don't read or write from this account
     original_mint_metadata: AccountInfo<'info>,
@@ -34,11 +37,18 @@ pub struct InitEntryCtx<'info> {
 pub fn handler(ctx: Context<InitEntryCtx>, _user: Pubkey) -> Result<()> {
     let stake_entry = &mut ctx.accounts.stake_entry;
     let stake_pool = &ctx.accounts.stake_pool;
+    let player = &mut ctx.accounts.player;
+    
+    if player.equipped_items.len() != 6  {
+      return Err(error!(ErrorCode::InvalidPlayerItems))
+    }
     
     stake_entry.bump = *ctx.bumps.get("stake_entry").unwrap();
     stake_entry.pool = ctx.accounts.stake_pool.key();
     stake_entry.original_mint = ctx.accounts.original_mint.key();
     stake_entry.amount = 0;
+
+
 
     // assert metadata account derivation
     assert_derivation(

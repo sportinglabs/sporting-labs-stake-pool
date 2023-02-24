@@ -24,10 +24,10 @@ describe("sporting-labs-contract", () => {
     // console.log(res);
 
     // // stake NFT
-    const mint = new PublicKey("9zorzrRpz9LqS8JZCveMcu3EyF5EciZ4MPdWTdeeSuQP")
+    const mint = new PublicKey("7qXAghPweYNBdZ6d6JNLRev8UbzwzDGz1nDxAJ9Sasd6")
 
-    // const res = await stake(connection, wallet, mint)
-    // console.log(res);
+    const res = await stake(connection, wallet, mint)
+    console.log(res);
     
     // // unstake NFT
     // const res = await unstake(connection, wallet, mint)
@@ -44,7 +44,7 @@ describe("sporting-labs-contract", () => {
     // const allPools = await getAllPools(connection);
     // console.log(allPools);
 
-    const res = await testRaindrops(wallet);
+    // const resres = await testRaindrops(wallet);
 
   });
 

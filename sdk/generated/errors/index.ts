@@ -553,6 +553,29 @@ createErrorFromNameLookup.set(
 )
 
 /**
+ * InvalidPlayerItems: 'Invalid Player Items'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidPlayerItemsError extends Error {
+  readonly code: number = 0x1787
+  readonly name: string = 'InvalidPlayerItems'
+  constructor() {
+    super('Invalid Player Items')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidPlayerItemsError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1787, () => new InvalidPlayerItemsError())
+createErrorFromNameLookup.set(
+  'InvalidPlayerItems',
+  () => new InvalidPlayerItemsError()
+)
+
+/**
  * Attempts to resolve a custom program error from the provided error code.
  * @category Errors
  * @category generated

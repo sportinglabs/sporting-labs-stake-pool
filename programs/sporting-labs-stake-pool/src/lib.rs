@@ -8,7 +8,7 @@ use {
     instructions::*,
 };
 
-declare_id!("41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB");
+declare_id!("D157bctkZhtTUqqESJ8QVUcVJHaGqTz1zaKSQPnxwdLc");
 
 #[program]
 pub mod sporting_labs_stake_pool {

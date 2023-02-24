@@ -38,6 +38,7 @@ export const initEntryStruct = new beet.BeetArgsStruct<
  *
  * @property [_writable_] stakeEntry
  * @property [_writable_] stakePool
+ * @property [] player
  * @property [] originalMint
  * @property [] originalMintMetadata
  * @property [_writable_, **signer**] payer
@@ -48,6 +49,7 @@ export const initEntryStruct = new beet.BeetArgsStruct<
 export type InitEntryInstructionAccounts = {
   stakeEntry: web3.PublicKey
   stakePool: web3.PublicKey
+  player: web3.PublicKey
   originalMint: web3.PublicKey
   originalMintMetadata: web3.PublicKey
   payer: web3.PublicKey
@@ -72,7 +74,7 @@ export const initEntryInstructionDiscriminator = [
 export function createInitEntryInstruction(
   accounts: InitEntryInstructionAccounts,
   args: InitEntryInstructionArgs,
-  programId = new web3.PublicKey('41MZASop6YTB5UmYNSDFxFJ4QYEMeDY9f7WcABLUmfoB')
+  programId = new web3.PublicKey('D157bctkZhtTUqqESJ8QVUcVJHaGqTz1zaKSQPnxwdLc')
 ) {
   const [data] = initEntryStruct.serialize({
     instructionDiscriminator: initEntryInstructionDiscriminator,
@@ -87,6 +89,11 @@ export function createInitEntryInstruction(
     {
       pubkey: accounts.stakePool,
       isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.player,
+      isWritable: false,
       isSigner: false,
     },
     {

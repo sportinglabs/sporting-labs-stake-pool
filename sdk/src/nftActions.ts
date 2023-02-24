@@ -6,6 +6,7 @@ import { findTokenManagerAddress, findMintCounterId } from "@cardinal/token-mana
 import { getRemainingAccountsForKind, getRemainingAccountsForInvalidate, TOKEN_MANAGER_ADDRESS } from "@cardinal/token-manager/dist/cjs/programs/tokenManager";
 import { ASSOCIATED_PROGRAM_ID } from "@project-serum/anchor/dist/cjs/utils/token";
 import { tryFn } from "./utils";
+import { getPlayerPDA } from "@raindrops-protocol/raindrops/build/utils/pda";
 
 export const stake = async(connection: Connection, wallet: any, originalMint: PublicKey) => {
 
@@ -120,6 +121,9 @@ export const unstake = async(connection: Connection, wallet: any, originalMint: 
     [Buffer.from("stake-entry"), stakePoolPda.toBuffer(), originalMint.toBuffer(), wallet.publicKey.toBuffer()],
     PROGRAM_ID
   );
+
+  // Raindrops
+  // const [playerPda] = await getPlayerPDA(originalMint, classIndex)
 
   const tx = new Transaction();
 

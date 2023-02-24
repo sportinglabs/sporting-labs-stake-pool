@@ -2,7 +2,7 @@ require("dotenv").config();
 import { Wallet, BN } from "@project-serum/anchor";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js"
 import { readFileSync } from "fs";
-import { createTreasuryAuthority, getAllPools, createPool, updatePool, stake, unstake } from "../sdk";
+import { createTreasuryAuthority, getAllPools, createPool, updatePool, stake, unstake, testRaindrops } from "../sdk";
 
 describe("sporting-labs-contract", () => {
   // Configure the client to use the local cluster.
@@ -41,8 +41,10 @@ describe("sporting-labs-contract", () => {
 
     // console.log(res);
 
-    const allPools = await getAllPools(connection);
-    console.log(allPools);
+    // const allPools = await getAllPools(connection);
+    // console.log(allPools);
+
+    const res = await testRaindrops(wallet);
 
   });
 

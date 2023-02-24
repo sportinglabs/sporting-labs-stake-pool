@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@cardinal/token-manager": "^4.0.2-beta.0",
+    "@raindrops-protocol/raindrops": "^0.2.8",
     "@solana/web3.js": "^1.73.0",
     "@switchboard-xyz/solana.js": "^2.0.86"
   }

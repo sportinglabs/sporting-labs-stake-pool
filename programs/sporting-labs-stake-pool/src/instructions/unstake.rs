@@ -2,6 +2,8 @@ use {
     crate::{errors::ErrorCode, state::*},
     anchor_lang::prelude::*,
     anchor_spl::token::{self, Mint, Token, TokenAccount},
+    raindrops_player::Player,
+    mpl_token_metadata::state::Metadata
 };
 
 #[derive(Accounts)]
@@ -13,6 +15,7 @@ pub struct UnstakeCtx<'info> {
     stake_entry: Box<Account<'info, StakeEntry>>,
 
     original_mint: Box<Account<'info, Mint>>,
+    player: Box<Account<'info, Player>>,
 
     // stake_entry token account
     #[account(mut, constraint =
@@ -48,6 +51,11 @@ pub fn handler(ctx: Context<UnstakeCtx>) -> Result<()> {
 
     let bump = treasury.bump.clone();
     let treasury_authority_seeds: &[&[&[u8]]] = &[&[&TREASURY_PREFIX.as_bytes(), &[bump]]];
+
+    let player = &mut ctx.accounts.player;
+    for item in player.equipped_items.iter() {
+        
+    }   
 
     if stake_pool.pool_state == PoolState::ActiveRace as u8 {
         return Err(error!(ErrorCode::RaceIsOngoing));

@@ -23,6 +23,7 @@ export type StakePoolArgs = {
   poolState: number
   result: number
   rewardMint: web3.PublicKey
+  requiresActiveTraits: number
 }
 
 export const stakePoolDiscriminator = [121, 34, 206, 21, 79, 127, 255, 28]
@@ -42,7 +43,8 @@ export class StakePool implements StakePoolArgs {
     readonly totalStaked: number,
     readonly poolState: number,
     readonly result: number,
-    readonly rewardMint: web3.PublicKey
+    readonly rewardMint: web3.PublicKey,
+    readonly requiresActiveTraits: number
   ) {}
 
   /**
@@ -57,7 +59,8 @@ export class StakePool implements StakePoolArgs {
       args.totalStaked,
       args.poolState,
       args.result,
-      args.rewardMint
+      args.rewardMint,
+      args.requiresActiveTraits
     )
   }
 
@@ -184,6 +187,7 @@ export class StakePool implements StakePoolArgs {
       poolState: this.poolState,
       result: this.result,
       rewardMint: this.rewardMint.toBase58(),
+      requiresActiveTraits: this.requiresActiveTraits,
     }
   }
 }
@@ -208,6 +212,7 @@ export const stakePoolBeet = new beet.FixableBeetStruct<
     ['poolState', beet.u8],
     ['result', beet.u8],
     ['rewardMint', beetSolana.publicKey],
+    ['requiresActiveTraits', beet.u16],
   ],
   StakePool.fromArgs,
   'StakePool'

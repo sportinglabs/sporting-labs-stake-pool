@@ -4,7 +4,8 @@ use {crate::{state::*, errors::ErrorCode}, anchor_lang::prelude::*};
 pub struct UpdatePoolIx {
     requires_creators: Vec<Pubkey>,
     authority: Pubkey,
-    pool_state: u8
+    pool_state: u8,
+    requires_active_traits: u16,
 }
 
 #[derive(Accounts)]
@@ -23,6 +24,7 @@ pub fn handler(ctx: Context<UpdatePoolCtx>, ix: UpdatePoolIx) -> Result<()> {
     stake_pool.requires_creators = ix.requires_creators;
     stake_pool.authority = ix.authority;
     stake_pool.pool_state = ix.pool_state as u8;
+    stake_pool.requires_active_traits = ix.requires_active_traits;
 
     // zero extra data
     let stake_pool_account = stake_pool.to_account_info();

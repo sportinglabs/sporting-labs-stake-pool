@@ -258,8 +258,13 @@
           "isSigner": false
         },
         {
+          "name": "playerClass",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "player",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -289,6 +294,11 @@
         },
         {
           "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "raindropsPlayer",
           "isMut": false,
           "isSigner": false
         }
@@ -525,6 +535,10 @@
           {
             "name": "rewardMint",
             "type": "publicKey"
+          },
+          {
+            "name": "requiresActiveTraits",
+            "type": "u16"
           }
         ]
       }
@@ -544,6 +558,22 @@
           },
           {
             "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "requiresActiveTraits",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UnstakeArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "playerClassMint",
             "type": "publicKey"
           }
         ]
@@ -567,6 +597,10 @@
           {
             "name": "poolState",
             "type": "u8"
+          },
+          {
+            "name": "requiresActiveTraits",
+            "type": "u16"
           }
         ]
       }

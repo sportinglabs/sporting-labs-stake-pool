@@ -29,7 +29,7 @@ describe("sporting-labs-contract", () => {
     const res = await stake(connection, wallet, mint)
     console.log(res);
     
-    // // unstake NFT
+    // unstake NFT
     // const res = await unstake(connection, wallet, mint)
     // console.log(res);
 

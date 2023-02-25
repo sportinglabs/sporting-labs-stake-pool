@@ -10,6 +10,9 @@ pub const STAKE_POOL_PREFIX: &str = "stake-pool";
 // 5 Pubkeys for creators and collections
 pub const STAKE_POOL_SIZE: usize = 8 + 1 + 8 + 32 + 4 + 3 * 32 + 4 + 1;
 
+// raindrops
+pub const PLAYER_PREFIX: &str = "player";
+
 #[account]
 pub struct Treasury {
     pub bump: u8,
@@ -49,6 +52,7 @@ pub struct StakePool {
     pub result: u8,
     // pub vrf: Pubkey,
     pub reward_mint: Pubkey,
+    pub requires_active_traits: u16
 }
 
 pub fn stake_entry_fill_zeros<'info>(stake_entry: &mut Account<StakeEntry>) -> Result<()> {

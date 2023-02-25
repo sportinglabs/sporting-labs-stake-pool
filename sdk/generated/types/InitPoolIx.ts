@@ -11,6 +11,7 @@ import * as beet from '@metaplex-foundation/beet'
 export type InitPoolIx = {
   requiresCreators: web3.PublicKey[]
   authority: web3.PublicKey
+  requiresActiveTraits: number
 }
 
 /**
@@ -21,6 +22,7 @@ export const initPoolIxBeet = new beet.FixableBeetArgsStruct<InitPoolIx>(
   [
     ['requiresCreators', beet.array(beetSolana.publicKey)],
     ['authority', beetSolana.publicKey],
+    ['requiresActiveTraits', beet.u16],
   ],
   'InitPoolIx'
 )

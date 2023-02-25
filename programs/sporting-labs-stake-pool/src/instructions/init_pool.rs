@@ -7,6 +7,7 @@ use {
 pub struct InitPoolIx {
     requires_creators: Vec<Pubkey>,
     authority: Pubkey,
+    requires_active_traits: u16,
 }
 
 #[derive(Accounts)]
@@ -38,6 +39,7 @@ pub fn handler(ctx: Context<InitPoolCtx>, ix: InitPoolIx) -> Result<()> {
     stake_pool.pool_state = PoolState::PreRace as u8;
     stake_pool.result = 0;
     stake_pool.reward_mint = treasury.reward_mint;
+    stake_pool.requires_active_traits = ix.requires_active_traits;
 
     treasury.pool_count += 1;
     Ok(())

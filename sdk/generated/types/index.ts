@@ -1,4 +1,5 @@
 export * from './InitPoolIx'
 export * from './PoolState'
 export * from './RaceResult'
+export * from './UnstakeArgs'
 export * from './UpdatePoolIx'

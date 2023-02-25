@@ -8,23 +8,15 @@
 import * as web3 from '@solana/web3.js'
 import * as beetSolana from '@metaplex-foundation/beet-solana'
 import * as beet from '@metaplex-foundation/beet'
-export type UpdatePoolIx = {
-  requiresCreators: web3.PublicKey[]
-  authority: web3.PublicKey
-  poolState: number
-  requiresActiveTraits: number
+export type UnstakeArgs = {
+  playerClassMint: web3.PublicKey
 }
 
 /**
  * @category userTypes
  * @category generated
  */
-export const updatePoolIxBeet = new beet.FixableBeetArgsStruct<UpdatePoolIx>(
-  [
-    ['requiresCreators', beet.array(beetSolana.publicKey)],
-    ['authority', beetSolana.publicKey],
-    ['poolState', beet.u8],
-    ['requiresActiveTraits', beet.u16],
-  ],
-  'UpdatePoolIx'
+export const unstakeArgsBeet = new beet.BeetArgsStruct<UnstakeArgs>(
+  [['playerClassMint', beetSolana.publicKey]],
+  'UnstakeArgs'
 )

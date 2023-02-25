@@ -27,12 +27,14 @@ export const unstakeStruct = new beet.BeetArgsStruct<{
  * @property [] treasury
  * @property [_writable_] stakeEntry
  * @property [] originalMint
- * @property [] player
+ * @property [_writable_] playerClass
+ * @property [_writable_] player
  * @property [_writable_] stakeEntryOriginalMintTokenAccount
  * @property [_writable_] userRewardMintTokenAccount
  * @property [_writable_] rewardMint
  * @property [_writable_, **signer**] user
  * @property [_writable_] userOriginalMintTokenAccount
+ * @property [] raindropsPlayer
  * @category Instructions
  * @category Unstake
  * @category generated
@@ -42,6 +44,7 @@ export type UnstakeInstructionAccounts = {
   treasury: web3.PublicKey
   stakeEntry: web3.PublicKey
   originalMint: web3.PublicKey
+  playerClass: web3.PublicKey
   player: web3.PublicKey
   stakeEntryOriginalMintTokenAccount: web3.PublicKey
   userRewardMintTokenAccount: web3.PublicKey
@@ -49,6 +52,7 @@ export type UnstakeInstructionAccounts = {
   user: web3.PublicKey
   userOriginalMintTokenAccount: web3.PublicKey
   tokenProgram?: web3.PublicKey
+  raindropsPlayer: web3.PublicKey
   anchorRemainingAccounts?: web3.AccountMeta[]
 }
 
@@ -93,8 +97,13 @@ export function createUnstakeInstruction(
       isSigner: false,
     },
     {
+      pubkey: accounts.playerClass,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
       pubkey: accounts.player,
-      isWritable: false,
+      isWritable: true,
       isSigner: false,
     },
     {
@@ -124,6 +133,11 @@ export function createUnstakeInstruction(
     },
     {
       pubkey: accounts.tokenProgram ?? splToken.TOKEN_PROGRAM_ID,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.raindropsPlayer,
       isWritable: false,
       isSigner: false,
     },
